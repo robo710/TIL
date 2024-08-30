@@ -7,19 +7,13 @@
 함수는 내부적으로 기능을 가진 형태이지만 외부에서 볼때는 파라미터를 넣는다는 점 외에는 자료형이 결정된 변수라는 개념으로 접근하는 것이 좋다
 
 - 사용 예시
-    
-    ```kotlin
     fun add(a: Int, b: Int, c: Int): Int{
     	return a + b + c
     }
-    ```
     
 
 ## 단일 표현식 함수(single-expression function)
 단일 표현식 함수에서는 반환형이 타입 추론이 가능하다.(반환형 생략 가능)
 
 - ex
-    
-    ```kotlin
     fun add(a: Int, b: Int, c: Int) = a + b + c
-    ```
