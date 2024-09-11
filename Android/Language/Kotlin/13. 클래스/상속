@@ -1,1 +1,46 @@
+상속(inheritance)
 
+상속이 필요한 경우 : 
+1. 이미 존재하는 클래스를 확장하여 새로운 속성이나 함수를 추가한 함수를 만들어야 할 때
+2. 여러개의 클래스를 만들었는데 클래스들의 공통점을 뽑아 코드관리를 편하게 할 때
+
+속성과 함수를 물려주는 쪽 : 슈퍼 클래스
+속성과 함수를 물려받는 쪽 : 서브 클래스
+
+코틀린은 상속 금지가 기본값 : open상태로 만들기
+open : 클래스가 상속될 수 있도록 클래스 선언시 붙여줄 수 있는 키워드
+
+ex : 
+open class 클래스 이름(속성)
+
+상속의 2가지 규칙
+1. 서브 클래스는 슈퍼 클래스에 존재하는 속성과 같은 이름의 속성을 가질 수 없다.
+2. 서브 클래스가 생성될 때는 반드시 슈퍼 클래스의 생성자까지 호출되어야 한다.
+
+상속 ex : 
+fun main(){
+	var a = Person("홍길동", 20, "Korea")
+	var b = Korean("홍길동", 20)
+	
+	a.say()
+	b.say()
+	
+	b.hi()
+}
+
+open class Person(var name: String, var age: Int, var country: String){
+	fun say(){
+		println("name : $name, age : $age, country : $country")
+	}
+}
+
+class Korean(name : String, age: Int) : Person(name, age, Korea){
+	fun hi(){
+		println("안녕하세요.")
+	}
+}
+
+상속받는 클래스의 속성에서는 var, val 를 붙이지 않는다.
+
+장점 : 클래스를 더 구조적으로 다룰 수 있게 해준다.
+단점 : 지나친 상속구조는 코드를 더 어렵게 만든다.
