@@ -1,1 +1,36 @@
+@Composable
+fun Text(
+    text: String,
+    modifier: Modifier = Modifier,
+    color: Color = Color.Unspecified,
+    fontSize: TextUnit = TextUnit.Unspecified,
+    fontStyle: FontStyle? = null,
+    fontWeight: FontWeight? = null,
+    fontFamily: FontFamily? = null,
+    letterSpacing: TextUnit = TextUnit.Unspecified,
+    textDecoration: TextDecoration? = null,
+    textAlign: TextAlign? = null,
+    lineHeight: TextUnit = TextUnit.Unspecified,
+    overflow: TextOverflow = TextOverflow.Clip,
+    softWrap: Boolean = true,
+    maxLines: Int = Int.MAX_VALUE,
+    onTextLayout: (TextLayoutResult) -> Unit = {},
+    style: TextStyle = LocalTextStyle.current
+)
 
+- text : 텍스트 내용 설정(필수)
+- modifier : 텍스트에 다양한 레이아웃, 제스처, 또는 모양 변경 등 설정
+- color : 색상 설정
+- fontSize : 폰트 크기 설정
+- fontStyle : 폰트 스타일(normal, italic) 설정
+- fontWeight : 폰트 굵기 설정
+- fontFamily : 폰트를 설정
+- letterSpacing : 글자 사이의 간격을 설정
+- textDecoration : 텍스트에 Underline(밑줄), LineThrough(가로줄) 설정
+- textAlign : 텍스트 정렬 설정
+- lineHeight : 줄 간격 설정
+- oveflow : overflow(글자 초과)시 어떻게 보일지 설정
+- softWrap : 글자가 영역을 넘어갔을 때 자동 줄바꿈 설정
+- maxLines : 최대 몇 줄까지 보여줄지 설정
+- onTextLayout : softWrap 등으로 인해 text의 크기 측정이 달라졌을 때의 CallBack
+- style : 텍스트의 스타일 지정
