@@ -36,8 +36,7 @@ fun TextField(
 - trailingIcon : 컨테이너 내부 끝(오른쪽) 부분에 표시할 것(아이콘 또는 텍스트도 가능)
 - prefix : 텍스트 입력 필드의 앞쪽에 고정된 텍스트 혹은 아이콘이 표시되는 UI 요소
 - suffix : 텍스트 입력 필드의 끝(오른쪽)에 고정된 텍스트 혹은 아이콘이 표시되는 UI 요소
-- supportingText : 텍스트 입력 필드 아래에 작은 보조 텍스트를 표시할 때 사용,
-입력에 대한 설명, 오류 메시지, 또는 기타 유용한 정보를 사용자에게 제공할 때 사용
+- supportingText : 텍스트 입력 필드 아래에 작은 보조 텍스트를 표시할 때 사용, 입력에 대한 설명, 오류 메시지, 또는 기타 유용한 정보를 사용자에게 제공할 때 사용
 - isError(Boolean) : true일 경우 textField 부분의 색이 변경
 - visualTransformation : 텍스트를 비밀번호와 같이 가리는 경우 사용 가능
 - keyboardOptions : KeyboardType, imeAction 등을 구성하는데 사용되는 SW 키보드 옵션
