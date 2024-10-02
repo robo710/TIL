@@ -1,1 +1,44 @@
+- Button
+    - Icon과 Text사이에 공간은 Spacer를 통해 간격을 줄 수 있다.
+    - 기본적으로 Button안에 content는 RowScope로 정리되어 있다.
+    - onClick:() → Unit : 버튼 클릭 시 발생할 엑션
 
+- 버튼 유형들
+
+- Button 색상 관련
+    - containerColor : Button의 색상
+    - contentColor : Button content의 색상
+    - disabledContainerColor : Disable된 Button의 색상
+    - disabledContentColor : Disable된 Button의 Content 색상
+   
+    colors = ButtonColors(
+                containerColor = 색상,
+                contentColor = 색상,
+                disabledContentColor = 색상,
+                disabledContainerColor = 색상
+            )
+    
+    - backgroundColor : 기본 배경색 설정
+    - disabledBackgroundColor : enable이 false일 때의 배경색 설정
+
+- Button 모양 관련
+    Button(shape = 속성)
+    
+    - Button shape을 설정하지 않으면 기본적으로 CircleShape이 적용된다.
+        - 타원형 모양 : CircleShape
+    - Radius 관련 속성을 다루는 것 : RoundedCornerShape
+    - 사각형 모양으로 사용할 때 : RectangleShape
+    - 코너가 직선으로 잘린 모양 : CutCornerShape
+
+- Button Border 관련
+    Button(border = BorderStroke(Border두께, 색상))
+    
+    - 테두리를 추가하고 색상을 변경할 수 있다.
+
+- elevation
+    - elevation : 버튼이 z축으로 올라와 보이는 효과 지정 가능
+        - defaultElevation : elevation의 기본값
+        - pressedElevation : 버튼을 눌렀을 때 elevation 값
+        - disabledElevation : 버튼의 enabled가 false일 때의 elevation 값
+
+- IconButton
