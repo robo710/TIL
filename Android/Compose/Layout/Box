@@ -10,3 +10,6 @@ inline fun Box(
 - contentAlignment : Box내부의 정렬 설정, 기본 = Alignment.TopStart
 - propagateMinConstraints(false) : Box내부에 최소 제약 조건을 설정할지 여부
 - content : Box내부의 내용
+__________________________________________________________________________
+
+여러 widget을 겹쳐 놓을 수 있는 레이아웃
