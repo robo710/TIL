@@ -1,1 +1,25 @@
+@Composable
+inline fun Row(
+    modifier: Modifier = Modifier,
+    horizontalArrangement: Arrangement.Horizontal = Arrangement.Start,
+    verticalAlignment: Alignment.Vertical = Alignment.Top,
+    content: @Composable RowScope.() -> Unit
+)
 
+- modifier : Layout의 Modifier 설정
+- horizontalArrangement(Arrangement.Start) : 가로 배치를 설정
+    - Start
+    - Center
+    - End
+    - SpaceBetween
+    - SpaceAround
+    - SpaceEvenly
+- verticalArrangement(Alignment.Top) : 세로 배치를 설정
+    - Top
+    - CenterVertically
+    - Bottom
+- content : Row의 내용 설정
+
+---
+
+- content를 수평으로 배치하는 layout
