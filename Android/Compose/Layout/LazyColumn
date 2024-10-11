@@ -1,1 +1,47 @@
+@Composable
+fun LazyColumn(
+    modifier: Modifier = Modifier,
+    state: LazyListState = rememberLazyListState(),
+    contentPadding: PaddingValues = PaddingValues(0.dp),
+    reverseLayout: Boolean = false,
+    verticalArrangement: Arrangement.Vertical =
+        if (!reverseLayout) Arrangement.Top else Arrangement.Bottom,
+    horizontalAlignment: Alignment.Horizontal = Alignment.Start,
+    flingBehavior: FlingBehavior = ScrollableDefaults.flingBehavior(),
+    userScrollEnabled: Boolean = true,
+    content: LazyListScope.() -> Unit
+)
 
+- modifier : Layout의 크기, 패딩, 배경 등 변경 가능
+- state : LazyColumn의 스크롤 상태를 관리하는 객체
+- contentPadding : LazyColumn 주위의 패딩 값 설정
+- reverseLayout(boolean : 기본 값 false) : true일 경우 item이 아래에서 위로 쌓이게 설정
+- verticalArrangement : item 간의 간격을 조절
+- horizontalAlignment : list의 item의 수평 정렬을 설정
+- flingBehavior : User가 스크롤을 마쳤을 경우 남은 관성을 제어
+- userScrollEnabled(boolean : 기본 값 true) : User가 직접 스크롤 가능 여부 설정
+- content : LazyColumn 내부의 내용
+
+---
+
+- XML의 RecyclerView와 비슷하다.
+- 수직으로 스크롤 하였을 때 화면에 보이는 item만 랜더링하여 성능을 향상시킨다.
+- LazyColumn은 item 기반으로 작동한다.
+- LazyColumn 내부에 직접 Composable을 넣을 경우에 사용하는 메소드
+(LazyItemScope에 있는 Composable 은 하나의 item으로 인식된다.
+    
+    fun item(key: Any? = null, content: @Composable LazyItemScope.() -> Unit)
+    
+- item이 Composable 한 개를 직접 넣기 위해 사용한다면 Items는 Composable을 반복하여 나타내고자 할 떄 사용된다.
+
+    inline fun <T> LazyListScope.itemsIndexed(
+        items: List<T>,
+        noinline key: ((index: Int, item: T) -> Any)? = null,
+        crossinline itemContent: @Composable LazyItemScope.(index: Int, item: T) -> Unit
+    
+- item으로 커스텀한 Class의 설정이 가능하다.
+  
+    inline fun <T> LazyListScope.itemsIndexed(
+        items: List<T>,
+        noinline key: ((index: Int, item: T) -> Any)? = null,
+        crossinline itemContent: @Composable LazyItemScope.(index: Int, item: T) -> Unit
