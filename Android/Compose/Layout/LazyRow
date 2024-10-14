@@ -1,1 +1,39 @@
+@Composable
+fun LazyRow(
+    modifier: Modifier = Modifier,
+    state: LazyListState = rememberLazyListState(),
+    contentPadding: PaddingValues = PaddingValues(0.dp),
+    reverseLayout: Boolean = false,
+    horizontalArrangement: Arrangement.Horizontal =
+        if (!reverseLayout) Arrangement.Start else Arrangement.End,
+    verticalAlignment: Alignment.Vertical = Alignment.Top,
+    flingBehavior: FlingBehavior = ScrollableDefaults.flingBehavior(),
+    userScrollEnabled: Boolean = true,
+    content: LazyListScope.() -> Unit
+)
 
+- modifier : layout의 Modifier 설정
+- state : list의 상태를 제어하거나 관찰할 경우 사용
+- contentPadding(0.dp) :
+    - 전체 content 주변 padding. content가 잘린 후 content에 padding이 추가되며 modifier로는 불가능하다.
+    - 1번째 item 앞 또는 마지막 item 뒤에 padding 추가 가능
+- reverseLayout(false) :
+    - scroll 및 layout 방향을 반대로 바꿀지 여부.
+    - true일 경우 item이 역순으로 배치된다.
+    - LazyListState.firstVisibleItemIndex == 0은 Row가 끝까지 스크롤됨을 의미한다.
+    - reverseLayout은 horizontalArrangement의 동작을 바꾸지 않는다.
+    - 123###은 321###이 된다
+- horizontalArrangement() :
+    - 각 아이템 사이에 간격을 추가
+    - layout 수평 배치
+    - item이 불충분할 경우 item사이에 간격을 추가하고 배열 지정이 가능하다.
+- verticalAlignment : item에 적용된 수직 정렬
+- flingBehavior : User가 스크롤을 마쳤을 경우 남은 관성을 제어
+- userScrollEnable(true) : user에게 scroll을 허용할지 여부
+- content : LazyRow안의 내용
+
+---
+
+- item들을 가로로 스크롤 할 수 있는 list
+- 가로 RecyclerVIew와 비슷하다.
+- LazyColumn은 세로로 스크롤 가능하고 LazyRow는 가로로 스크롤이 가능하다.
