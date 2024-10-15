@@ -1,1 +1,43 @@
+background에 brush를 사용하여 그라데이션을 만들 수 있다.
 
+Modifier.background의 파라미터 3가지
+
+Brush : 그라데이션 방향 설정
+Shape : 모양 설정
+alpha : 투명도 설정
+
+Brush는 그라데이션을 다루기 위한 클래스들을 모아둔 sealed Class이다.
+
+- sealed Class에서 상속받는 클래스 :
+    - LinearGradient
+    - RadialGradient
+    - SweepGradient
+
+- linearGradient : 시작점에서 끝점으로 그라데이션 적용. LinearGradient을 생성한다.
+    ex:
+    brush = Brush.linearGradient(colors = 시작색And끝색, start = 시작점, end = 끝점)
+    
+- verticalGradient : 수직으로 그라데이션 적용. LinearGradient을 수직 버전으로 생성한다.
+    ex:
+    brush = Brush.verticalGradient(colors = 시작색And끝색)
+    
+    brush = Brush.verticalGradient(colors = 시작색And끝색,startY = 그라데이션 시작위치,endY = 그라데이션 끝위치)
+    
+- horizontalGradient : 수평으로 그라데이션 적용. LinearGradient을 수평 버전으로 생성한다.
+    ex:
+    brush = Brush.horizontalGradient(colors = 시작색And끝색)
+    
+    brush = Brush.horizontalGradient(colors = 시작색And끝색, startX = 그라데이션 시작위치, endX = 그라데이션 끝위치)
+    
+- radialGradient : 중심점에서 바깥쪽으로 그라데이션이 적용된다. RadialGradient을 생성한다.
+    ex:
+    brush = Brush.radialGradient(colors = 시작색And끝색)
+    
+    brush = Brush.radialGradient(colors = 시작색And끝색, center = Offset(x좌표, y좌표), radius = 반지름)
+    
+- sweepGradient : Gradient에 문지름이 적용된다. 색상을 문지르는것과 같은 효과가 적용된다.
+    
+    ex:
+    brush = Brush.sweepGradient(colors = redAndBlue)
+    
+    brush = Brush.sweepGradient(colors = redAndBlue, center = Offset(x좌표, y좌표))
