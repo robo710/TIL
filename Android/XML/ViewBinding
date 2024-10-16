@@ -1,1 +1,39 @@
+---------
+사용 방법
 
+1. gradle추가
+    android {
+        buildFeatures{
+            viewBinding true
+        }
+    }    
+
+2. Activity
+    - Java
+        public class MainActivity extends AppCompatActivity {
+            private ActivityMainBinding binding;
+        
+            @Override
+            protected void onCreate(Bundle savedInstanceState) {
+                super.onCreate(savedInstanceState);
+                binding = ActivityMainBinding.inflate(getLayoutInflater());
+                EdgeToEdge.enable(this);
+                setContentView(binding.getRoot());
+                ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+                    Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                    v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+                    return insets;
+                });
+            }
+        }
+        
+    - Kotlin
+        private lateinit var binding: ActivityMainBinding
+         
+        class MainActivity : AppCompatActivity() {
+            override fun onCreate(savedInstanceState: Bundle?) {
+                super.onCreate(savedInstanceState)
+                binding = ActivityMainBinding.inflate(layoutInflater)
+                setContentView(binding.root)
+            }
+        }
