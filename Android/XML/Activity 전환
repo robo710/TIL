@@ -1,1 +1,8 @@
-
+- Intent를 사용하여 화면전환
+    - Java
+        Intent intent = new Intent(this, Activity.class);
+                startActivity(intent);
+        
+    - Kotlin
+        val intent = Intent(this, Activity::class.java)
+        startActivity(intent)
