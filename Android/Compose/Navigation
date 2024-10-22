@@ -1,1 +1,84 @@
+1. dependency 추가
+    dependencies{
+    	implementation("androidx.navigation:navigation-compose:$nav_version")
+    }
+    
+2. route 와 NavHostController 제작
+    1. route 정의
+        enum class ClassName(){
+        }
+        
+    2. NavController 제작
+        val navController = rememberNavController
+        
+        - NavController는 back stack과 스크린 상태 추적
+3. NavHost 추가
+    - NavController는 하나의 NavHost와 연결되어있어야 한다.
+    - NavHost는 NavController와 Navigation Graph를 연결하는 역할을 한다.
+    
+    @Composable
+    public fun NavHost(
+        navController: NavHostController,
+        startDestination: String,
+        modifier: Modifier = Modifier,
+        contentAlignment: Alignment = Alignment.TopStart,
+        route: String? = null,
+        enterTransition:
+            (@JvmSuppressWildcards
+            AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition) =
+            {
+                fadeIn(animationSpec = tween(700))
+            },
+        exitTransition:
+            (@JvmSuppressWildcards
+            AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition) =
+            {
+                fadeOut(animationSpec = tween(700))
+            },
+        popEnterTransition:
+            (@JvmSuppressWildcards
+            AnimatedContentTransitionScope<NavBackStackEntry>.() -> EnterTransition) =
+            enterTransition,
+        popExitTransition:
+            (@JvmSuppressWildcards
+            AnimatedContentTransitionScope<NavBackStackEntry>.() -> ExitTransition) =
+            exitTransition,
+        sizeTransform:
+            (@JvmSuppressWildcards
+            AnimatedContentTransitionScope<NavBackStackEntry>.() -> SizeTransform?)? =
+            null,
+        builder: NavGraphBuilder.() -> Unit
+    ){
+    		composable(route) {
+                content
+        }
+    }
+    
+    - 필수적인 매개변수
+        - navController : navController
+        - startDestination : 처음 NavHost로 보여주는 화면
+    - content : NavController의 destination에 있는 모든 composable 정의
+4. 화면 전환하기
+    
+    navController.navigate(route)
+    
+    1. navigate(route)를 통해 화면 전환가능
+        - navigate() 옵션
+            - popUpTo(route) :
+                - 화면 전환하기 전에, route에 해당하는 화면이 나오기 전까지의 back stack을 뺀다.
+                - inclusive를 true로 하면 route에 해당하는 화면까지 back stack에서 뺀다.
+            - launchSingleTop = true
+                - route에 해당하는 화면이 아닌 경우 route로 화면 전환된다.
+                - back stack에 동일한 route가 중복으로 있는 경우 방지
 
+---
+
+- popBackStack() 사용
+    - 여러 작업을 취소하고 싶은 경우 사용
+    
+      navController.popBackStack(route, inclusive)
+    
+    - route : 돌아가고 싶은 화면
+    - inclusive(Boolean) :
+        - true : 특정 route 삭제
+        - false : 모든 destination을 없애고 startDestination으로 이동
