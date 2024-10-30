@@ -1,1 +1,12 @@
+- SHA(Secure Hash Algorithm, 안전한 해시 알고리즘)
+- SHA는 Firebase를 사용할 때 등록해야 한다.
+- SHA 함수들은 암호학적 Hash 함수들의 모음이다.
 
+---
+
+안드로이드 스튜디오에서 SHA 확인법
+
+- 안드로이드 스튜디오 우측 Gradle 목록에서 Project이름 → app → Tasks → android → signingReport를 더블 클릭하면 나온다.
+- Gradle Tasks 목록에서 signingReport가 나오지 않을 경우 설정에서 Configure all Gradle tasks during Gradle Sync (this can make Gradle Sync slower)를 찾아서 활성화 시킨다.
+    
+    이후 File → Sync Project with Gradle Files를 누르면 해결된다.
