@@ -1,1 +1,12 @@
+- 초기 컴포지션(Initial Composition)
+- 리컴포지션(ReComposition) : 이미 그려진 Composable UI를 업데이트하거나 다시 그리는 과정
+- 컴포지션 종료(Leaving the Composition)
 
+---
+
+- Composable의 생명 주기는 Composable의 시작 → 
+0회 이상 재구성 및 Composable 종료 이벤트 → 
+Composable 종료로 진행된다.
+
+- 컴포저블이 여러 번 호출되면 컴포지션에 여러 인스턴스가 배치된다.
+컴퍼지션의 각 호출에는 자체 수명 주기가 있다.
