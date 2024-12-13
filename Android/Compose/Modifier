@@ -1,1 +1,51 @@
+Modifier를 사용하여 컴포저블을 장식하거나 강화할 수 있다.
 
+기능
+
+- 컴포저블의 크기, 레이아웃, 동작 및 모양 변경
+- 접근성 라벨과 같은 정보 추가
+- 사용자 입력 처리
+- 요소를 클릭 가능, 스크롤 가능, 드래그 가능 또는 확대/축소 가능하게 만드는 높은 수준의 상호작용 추가
+
+Modifier는 순서가 중요하다.
+각 함수는 이전 함수에서 반환한 Modifier를 변경하므로 순서는 최종 결과에 영향을 준다.
+
+예를 들어
+
+@Composable
+fun Click() {
+    Column(
+        Modifier
+            .clickable(onClick = onClick)
+            .padding(16.dp)
+            .fillMaxWidth()
+    ) {
+    }
+}
+
+이 코드는 padding이 clickable 뒤에 왔기 때문에 padding을 포함한 전체 영역을 클릭할 수 있지만
+
+@Composable
+fun Click() {
+    Column(
+        Modifier
+		        .padding(16.dp)
+            .clickable(onClick = onClick)
+            .fillMaxWidth()
+    ) {
+    }
+}
+
+이 코드는 padding뒤에 clickable이 왔기 때문에 클릭 가능한 영역이 padding을 포함하지 않는다.
+
+그 외 modifier 설정의 종류로는
+- .width(x.dp) : 너비 설정
+- .height(x.dp) : 높이 설정
+- .size(width = x.dp, height = y.dp) : 크기 설정
+- fillMaxWidth() : 너비를 꽉 채우기
+- fillMaxHeight() : 높이 꽉 채우기
+- fillMaxSize() : 높이와 너비를 모두 꽉 채우기
+- padding(x.dp) : 요소 주위에 적용할 공백 공간
+- offset(x = x.dp, y = y.dp) : padding과 비슷하지만 측정값이 변경되지 않는다는 차이점이 있다.
+- background(brush, color, shape) : 배경을 설정하는 것이다.
+- border(width, color, shape) : 요소의 태두리를 그리는 것이다.
