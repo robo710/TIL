@@ -1,1 +1,100 @@
+buildAnnotatedString이란 AnnotatedString객체를 만드는 inline function이다.
 
+### AnnotatedString이란
+
+동일한 Text 컴포저블 내에서 여러 스타일을 설정할 수 있도록 하는 객체이다.
+
+AnnotatedString 매개변수
+
+@Immutable
+class AnnotatedString internal constructor(
+    val text: String,
+    internal val spanStylesOrNull: List<Range<SpanStyle>>? = null,
+    internal val paragraphStylesOrNull: List<Range<ParagraphStyle>>? = null,
+    internal val annotations: List<Range<out Any>>? = null
+)
+
+- Text : 사용할 문자열
+- SpanStyle : 텍스트 크기, 간격 등 지정
+- ParagraphStyle : 텍스트 정렬, 텍스트 방향, 줄 간격, 텍스트 들여쓰기 스타일 지정
+- Annotations : 텍스트에 부가적 정보를 추가하는 기능(하이퍼링크)
+
+SpanStyle과 ParagraphStyle의 차이점 ParagraphStyle은 전체 단락에 적용 가능, SpanStyle은 문자 수준에서 적용 가능
+
+### buildAnnotatedString 사용법
+
+buildAnnotatedString은 inline function으로 AnnotatedString을 만들어내는 빌더를 인자로 받는다.
+
+builder에 String을 추가하는 방법은 append를 사용하여 String을 추가하는 것이다.
+
+- EX
+    @Composable
+    fun Test(){
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = Color.White)
+        ) {
+            Text(
+                text = buildAnnotatedString {
+                    append("Hello")
+                    append("Android")
+                    append("World")
+                }
+            )
+        }
+    }
+    
+
+추가한 String을 withStyle을 사용하여 Style을 추가할 수 있다.
+
+- EX 
+    @Composable
+    fun Test(){
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            Text(
+                text = buildAnnotatedString {
+                    withStyle(
+                        SpanStyle(color = Color.Magenta)
+                    ) {
+                        append("Hello")
+                    }
+                    withStyle(
+                        SpanStyle(color = Color.White)
+                    ) {
+                        append("Android")
+                    }
+                    withStyle(
+                        SpanStyle(color = Color.Magenta)
+                    ) {
+                        append("World")
+                    }
+                }
+            )
+        }
+    }
+    
+    이런 식으로 간략하게 가능
+    
+    kotlin
+    @Composable
+    fun Test(){
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            Text(
+                text = buildAnnotatedString {
+                    listOf("Hello" to Color.Magenta, "Android" to Color.White, "World" to Color.Magenta)
+                        .forEach { (text, color) ->
+                            withStyle(SpanStyle(color = color)) {
+                                append(text)
+                            }
+                        }
+                }
+            )
+        }
+    }
