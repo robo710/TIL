@@ -1,1 +1,341 @@
+AndroidManifest.xml은 앱의 설정 정보를 담고 있는 필수 구성 요소이다.
 
+Manifest 파일은 Android 빌드 도구, Android 운영체제 및 Google Play에 앱에 관한 필수 정보를 설명해야 한다.
+
+반드시 선언되어야 하는 내용들
+
+- 앱의 구성요소(Activity, Service, Broadcast Receiver, Content Provider)
+- 앱의 시스템 또는 다른 앱의 보호된 부분에 액세스하기 위해 필요한 접근 권한
+- 앱에 필요한 하드웨어 및 소프트웨어 기능
+
+## Manifest파일에 선언되어야 하는 내용
+
+## Manifest
+
+- AndroidManifest.xml의 루트 요소다.
+- 단 하나의 Application만을 요소로 포함해야 한다.
+- **xmlns:** 'xml namespace'의 약자. 'android:'를 루트 명시 없이 사용할 수 있게 해준다.
+
+## Application (앱 전역 설정)
+
+- application 선언이다.
+- 애플리케이션의 각 구성요소를 선언하는 하위 요소를 포함한다.
+- 모든 구성요소에 영향을 줄 수 있는 속성을 가지고 있다.
+
+### Application 예시
+
+```kotlin
+<application
+    android:allowBackup="true"
+    android:icon="@mipmap/ic_launcher"
+    android:label="MyApp"
+    android:supportsRtl="true"
+    android:theme="@style/Theme.MyApp">
+</application>
+```
+
+### <application> 태그 속성 정리
+
+```kotlin
+// 앱 데이터를 백업할 수 있는지 여부	
+android:allowBackup="true"
+
+// 앱 아이콘 지정
+android:icon="@mipmap/ic_launcher"
+
+// 앱 이름	
+android:label="MyApp"
+
+// RTL(Right-To-Left) 레이아웃 지원 (오른쪽에서 왼쪽으로 읽는 나라의 경우 지원)	
+android:supportsRtl="true"
+
+// 앱 전체에 적용할 테마
+android:theme="@style/Theme.MyApp">
+```
+
+[<application>에 관한 더 자세한 내용](https://developer.android.com/guide/topics/manifest/application-element?hl=ko)
+
+## Activity
+
+- 애플리케이션의 시각적 사용자 인터페이스 요소를 구현하는 활동을 선언한다.
+- 애플리케이션 내의 모든 Activity는 이 `<activity>` 요소로 나타나야 한다.
+- Manifest에 등록되지 않은 Activity는 시스템에서 인식되지 않아 실행할 수 없다.
+
+### Activity 예시
+
+```kotlin
+<activity
+    android:name=".MainActivity"
+    android:exported="true"
+    android:label="@string/app_name"
+    android:theme="@style/Theme.PhotoRetouching">
+    <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+    </intent-filter>
+</activity>
+```
+
+### <activity> 태그 속성
+
+```kotlin
+// 액티비티의 클래스 이름
+android:name=".MainActivity"
+
+// 다른 앱에서 이 액티비티를 호출할 수 있는지 여부를 결정하는 것
+android:exported="true"
+
+// 액티비티의 화면에 표시될 제목	
+android:label="label"
+
+// 특정 액티비티에 적용할 테마 지정
+android:theme="@style/Theme.MyApp"
+
+// 화면 방향 설정 (세로 : portrait, 가로 : landscape)
+android:screenOrientation="portrait"
+
+// 실행할 때 필요한 권한 설정
+android:permission="android.permission.CAMERA"
+
+// Activity의 실행방식 지정
+// standard(기본값) -> 매번 새 액티비티 생성
+// singleTop -> 같은 인스턴스가 최상위에 있으면 재사용
+// singleTask -> 새로운 Task를 생성하고 해당 Activity를 최상위로 유지
+// singleInstance -> 하나의 인스턴스만 존재 가능
+android:launchMode="singleTask"
+
+// Task를 그룹화하는 속성
+android:taskAffinity="com.example.myapp"
+
+// 다른 Task로 이동 가능 여부
+android:allowTaskReparenting="true"
+
+// 화면 회전 등 특정 설정 변경 시 액티비티 재시작 방지
+// keyboardHidden : 키보드를 띄우고 다시 숨길 때 설정을 유지하겠다는 뜻
+// orientation :  화면의 가로모드/세로모드가 전환될 때 설정을 유지하겠다는 뜻
+// 화면이 회전할 때에는 orientation 외에 screenSize 속성도 함께 설정해 주어야 정상적으로 적용된다.
+android:configChanges="orientation"
+
+// 키보드 표시 방식 설정
+// Default(기본 값) : ajdustUnspecified와 stateUnspecified 적용됩니다.
+// adjustPan : 키보드가 올라올 때  UI화면도 같이 위로 올라갑니다.
+// adjustResize : 키보드가 올라갈 때 액티비티의 크기를 조정해줍니다.
+// adjustUnspecified : 시스템이 알아서 상황에 맞는 옵션을 설정해줍니다.
+// stateHidden : 액티비티를 실행했을 때 키보드가 자동으로 올라오는것을 방지합니다.
+// stateVisible : 액티비티를 실행하면 키보드가 자동으로 올라옵니다.
+// stateUnspecified : 시스템이 적절한 키보드 상태를 설정해줍니다.
+android:windowSoftInputMode="adjustResize"
+
+// 전체 화면 모드 활성화 (API 19+)
+android:immersive="true"
+```
+
+[<activity>에 관한 더 자세한 내용](https://developer.android.com/guide/topics/manifest/activity-element?hl=ko)
+
+## Service
+
+- 백그라운드에서 실행되는 컴포넌트로, UI 없이 독립적으로 작업을 수행할 때 사용한다.
+
+### Service 예시
+
+```kotlin
+<service
+    android:name=".MyService"
+    android:enabled="true"
+    android:exported="false">
+</service>
+```
+
+### <service> 태그 속성
+
+```kotlin
+// 서비스 클래스 이름
+android:name=".MyService"
+
+// 서비스 사용 가능 여부 설정
+android:enabled="true"
+
+// 다른 앱에서 이 서비스를 사용할 수 있는지 여부 설정
+android:exported="false"
+
+// 서비스를 시작할 때 필요한 권한 설정
+android:permission="android.permission.BIND_JOB_SERVICE"
+```
+
+[<service>에 관한 더 자세한 내용](https://developer.android.com/guide/topics/manifest/service-element?hl=ko)
+
+## Broadcast Receiver
+
+- 시스템 또는 다른 앱에서 발생한 이벤트를 감지하고 처리하는 역할을 한다.
+
+### Broadcast Receiver 예시
+
+```kotlin
+<receiver android:name=".MyBroadcastReceiver">
+    <intent-filter>
+        <action android:name="android.intent.action.BOOT_COMPLETED" />
+    </intent-filter>
+</receiver>
+```
+
+### <receiver> 태그 속성
+
+```kotlin
+// Receiver 클래스 이름
+android:name=".MyBroadcastReceiver"
+
+// Receiver 활성화 여부
+android:enabled="true"
+
+// 다른 앱에서 이 Receiver를 호출할 수 있는지 여부 설정
+android:exported="false"
+
+// 특정 권한이 있어야 실행 가능 설정
+android:permission="android.permission.RECEIVE_BOOT_COMPLETED"
+```
+
+[<receiver>에 관한 더 자세한 내용](https://developer.android.com/guide/topics/manifest/receiver-element?hl=ko)
+
+## Content Provider
+
+- 앱 간 데이터 공유를 담당하는 컴포넌트이다.
+
+### Content Provider 예시
+
+```kotlin
+<provider
+    android:name=".MyContentProvider"
+    android:authorities="com.example.myapp.provider"
+    android:exported="false"
+    android:grantUriPermissions="true">
+</provider>
+```
+
+### <provider> 태그 속성
+
+```kotlin
+// Provider 클래스 이름
+android:name=".MyContentProvider"
+
+// 앱의 고유한 데이터 식별자
+android:authorities="com.example.myapp.provider"
+
+// 다른 앱에서 접근 가능 여부 설정
+android:exported="false"
+
+// 특정 URI에 대한 접근 권한 부여 가능 여부
+android:grantUriPermissions="true"
+```
+
+- `android:authorities` → 이 값을 통해 다른 앱이 데이터를 요청할 수 있음
+- `android:exported`가 `false`이면, `grantUriPermissions="true"`을 설정하여 특정 앱만 접근 가능하도록 할 수 있음
+
+[<provider>에 관한 더 자세한 내용](https://developer.android.com/guide/topics/manifest/provider-element?hl=ko)
+
+## Uses-permission (권한 요청)
+
+- 앱이 올바르게 작동하기 위해 사용자가 반드시 부여해야 하는 시스템 권한이다.
+- 여기에 정의된 권한은 애플리케이션 설치 시 해당 애플리케이션이 어떤 권한을 요구하는지를 사용자에게 보여준다.
+
+### 권한 요청 예시
+
+```kotlin
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+```
+
+**주요 권한 정리**
+
+- `INTERNET` → 인터넷 사용
+- `ACCESS_FINE_LOCATION` → GPS 위치 정보 접근
+- `READ_EXTERNAL_STORAGE` → 외부 저장소 읽기
+- `WRITE_EXTERNAL_STORAGE` → 외부 저장소 쓰기 (Android 10부터는 `scoped storage` 적용)
+
+[<uses-permission>에 관한 더 자세한 내용](https://developer.android.com/guide/topics/manifest/uses-permission-element?hl=ko)
+
+## Uses-feature (필수 기능 명시)
+
+앱이 특정 하드웨어 또는 소프트웨어 기능을 필요로 한다면 이를 선언한다.
+
+### Uses-feature 예시
+
+```kotlin
+<uses-feature android:name="android.hardware.camera" android:required="true" />
+<uses-feature android:name="android.hardware.bluetooth_le" android:required="false" />
+```
+
+- `android:name` → 필요한 하드웨어 또는 소프트웨어 기능
+- `android:required="true"` → 필수 기능 여부 (`false`이면 해당 기능이 없어도 앱 실행 가능)
+
+[<uses-feature>에 관한 더 자세한 내용](https://developer.android.com/guide/topics/manifest/uses-feature-element?hl=ko)
+
+## Intent-Filter
+
+- 상위 구성요소들이 응답할 수 있는 intent의 유형을 정의한다.
+- 전달되는 유형의 수신 인텐트로 구성요소를 열고 이 구성요소에 유의미하지 않은 인텐트를 필터링한다.
+
+### Intent-Filter 예시
+
+```kotlin
+<intent-filter>
+    <action android:name="android.intent.action.MAIN" />
+    <category android:name="android.intent.category.LAUNCHER" />
+</intent-filter>
+```
+
+[<intent-filter>에 관한 더 자세한 내용](https://developer.android.com/guide/topics/manifest/intent-filter-element?hl=ko)
+
+## Action
+
+- intent-filter에 작업을 추가한다.
+- intent-filter 안에 action이 하나 이상 있어야 한다.
+- 이 인텐트 필터가 응답할 수 있는 작업(Action)을 정의하는 부분
+
+### Action 예시
+
+```kotlin
+<intent-filter>
+    <action android:name="android.intent.action.MAIN" />
+</intent-filter>
+```
+
+### 주요 Action 예시
+
+- `android.intent.action.MAIN`→ 앱의 진입점(MainActivity)에 사용
+- `android.intent.action.VIEW` → 데이터를 표시하는 Activity 실행 (ex. 웹페이지, 이미지 등)
+- `android.intent.action.SEND` → 다른 앱에 데이터를 공유할 때 사용
+- `android.intent.action.CALL` → 전화 걸기
+- `android.intent.action.BOOT_COMPLETED` → 기기가 부팅된 후 실행되는 브로드캐스트 리시버
+- `android.intent.action.BATTERY_LOW` → 배터리가 부족할 때 실행
+
+[<action>에 관한 더 자세한 내용](https://developer.android.com/guide/topics/manifest/action-element?hl=ko)
+
+## Category
+
+- 이 인텐트 필터가 어떤 유형의 인텐트를 수락할지 정의하는 부분
+
+### Category 예시
+
+```kotlin
+<intent-filter>
+    <action android:name="android.intent.action.SEND" />
+    <category android:name="android.intent.category.DEFAULT" />
+</intent-filter>
+```
+
+### 주요 Category 예시
+
+- `android.intent.category.LAUNCHER` → 홈 화면에서 실행할 수 있도록 설정
+- `android.intent.category.DEFAULT` → 일반적인 인텐트(Implicit Intent)를 처리할 수 있도록 설정
+- `android.intent.category.BROWSABLE` → 웹 브라우저를 통해 실행 가능하도록 설정
+- `android.intent.category.HOME` → 기본 홈 애플리케이션으로 설정
+- `android.intent.category.ALTERNATIVE` → 다른 애플리케이션의 대체 액션 제공
+
+[<category>에 관한 더 자세한 내용](https://developer.android.com/guide/topics/manifest/category-element?hl=ko)
+
+추가로 Android 12(API 31)부터 `exported` 속성이 필수라고 한다.
+
+---
+
+참고 내용 : https://developer.android.com/guide/topics/manifest/manifest-intro?hl=ko
