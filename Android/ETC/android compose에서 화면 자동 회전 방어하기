@@ -1,0 +1,108 @@
+Android에서 화면 자동 회전으로 오류가 발생하거나 화면이 이상해지는 경우가 생길 수 있다. 이를 방어하기 위해서는 화면이 회전하는 것을 막는 방법으로 크게 3가지가 있다.
+
+1. Manifest 설정으로 화면 고정하기
+2. Activity 코드에서 강제로 화면 고정하기
+3. Viewmodel과 rememberSaveable 잘 활용하기
+
+## 1. Manifest 설정으로 화면 고정하기
+
+가장 간단하면서 기본적인 방법이다.
+
+ AndroidManifest.xml 파일에서 액티비티에 screenOrientation 속성을 추가하는 것이다.
+
+### ex:
+
+```kotlin
+ <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.PhotoRetouching"
+            android:screenOrientation="portrait" // screenOrientation 속성 추가
+            >
+</activity>
+```
+
+portrait : 세로
+
+landscape : 가로
+
+### 장단점
+
+- 장점
+    - 한 줄로 간단하게 설정이 가능하다.
+- 단점
+    - 런타임 중 설정을 바꾸기 어렵다.
+
+## 2. Activity 코드에서 강제로 화면 고정하기
+
+코드로 강제로 Activity의 화면을 고정 할 수 있다.
+
+### ex:
+
+```kotlin
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT // 화면을 세로로 고정하기
+
+        setContent {
+            MyApp()
+        }
+    }
+}
+```
+
+필요할 경우 화면 고정을 풀 수 있다.
+
+```kotlin
+// 고정하기
+requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT // 세로 고정
+requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE // 가로 고정
+
+// 해제 (센서 다시 활성화)
+requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+```
+
+### 장단점
+
+- 장점
+    - 상황에 따라 동적으로 제어가 가능하다.
+    - 특정 화면에만 고정할 수 있다.
+- 단점
+    - 복잡한 구조에서의 유지보수가 어려울 수 있다.
+
+## 3. Viewmodel과 rememberSaveable 잘 활용하기
+
+화면이 회전할 경우 액티비티의 생명주기가 onDestroy 된 후, 다시 onCreate 되면서 화면의 UI 상태가 초기화되기 쉬우므로 회전을 막는 대신 상태를 유지하는 것이다.
+
+```kotlin
+@Composable
+fun MyScreen(viewModel: MyViewModel = viewModel()) {
+    val uiState by viewModel.uiState.collectAsState()
+
+    // 상태 유지
+    val count = rememberSaveable { mutableStateOf(0) }
+
+    Text("Count: $count")
+}
+```
+
+rememberSaveable이나 ViewModel을 활용하면, 굳이 회전을 막지 않고도 UI 상태 유지가 가능하다.
+
+### 장단점
+
+- 장점
+    - UI의 상태를 유지시켜 회전을 허용하면서도 상태를 유지하는 UI를 사용할 수 있다.
+- 단점
+    - 회전을 막지 못한다.
+    - 난이도가 비교적 어려울 수 있다.
+
+---
+
+## 정리
+
+1. Manifest 설정으로 화면 고정하기 (가장 간단하다.)
+2. Activity 코드에서 강제로 화면 고정하기 (유연하게 사용 가능하다.)
+3. Viewmodel과 rememberSaveable 잘 활용하기 (UI의 상태를 유지하면서 회전을 허용할 수 있다.)
