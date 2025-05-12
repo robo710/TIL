@@ -1,1 +1,53 @@
+안드로이드에서 기본 제공하는 Toast는 `Toast.LENGTH_SHORT` (2초)와 `Toast.LENGTH_LONG` (3.5초) 두 가지 고정된 노출 시간만 제공한다.
 
+하지만 2초보다 적거나, 3.5초 보다 더 길게 화면에 띄워야 하는 경우가 생긴다.
+
+Toast 메시지를 각 상황에 따라 직접 Toast 메시지의 노출 시간을 조절할 수 있는 Custom Toast를 구현하게 되었다.
+
+## Custom Toast의 노출 시간 제어 부분
+
+```kotlin
+val toast = Toast(context).apply {
+            this.duration = duration
+            this.view = composeView
+            setGravity(
+                Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL,
+                0, // xOffset
+                dpToPx(50 )// yOffset
+            )
+        }
+
+        toast.show()
+
+        Handler(Looper.getMainLooper()).postDelayed({
+            toast.cancel()
+        }, duration.toLong()) // 밀리초 단위
+```
+
+현재 사용하고 있는 CustomToast의 코드 중 일부이다.
+
+```kotlin
+val toast = Toast(context).apply {
+            this.duration = duration
+            this.view = composeView
+            setGravity(
+                Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL,
+                0, // xOffset
+                dpToPx(50 )// yOffset
+            )
+        }
+```
+
+먼저 위 코드로 Toast 객체를 생성해 준다.
+
+그 후 `toast.show()`를 사용하여 Toast 메시지를 띄운다.
+
+이후 지정된 시간만큼 노출하고 강제 종료 시키기 위하여 Handler를 사용하여
+
+```kotlin
+Handler(Looper.getMainLooper()).postDelayed({
+    toast.cancel()
+}, duration.toLong()) // 밀리초 단위
+```
+
+메인 스레드에서 지정된 시간만큼 기다린 후 `toast.cancel()` 을 호출하여 Toast를 직접 종료시킴으로써 원하는 시간만큼 Toast를 노출시키게 할 수 있다.
