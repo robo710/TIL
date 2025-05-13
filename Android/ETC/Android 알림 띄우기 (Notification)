@@ -1,0 +1,94 @@
+안드로이드에서 사용자에게 알림을 표시하는 방법을 알아보겠습니다.
+
+## 1. 권한 설정
+
+Android 13(API 33) 이상부터는 사용자에게 알림을 수신하기 위해서는 POST_NOTIFICATIONS라는 권한을 요청해야 합니다. Manifest에 권한을 추가해야 합니다.
+
+```kotlin
+<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+```
+
+추가로 Android 13 이상에서는 런타임 권한 요청도 필요합니다.
+
+```kotlin
+ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) { // 안드로이드 13 이상
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) != PackageManager.PERMISSION_GRANTED
+            ) {
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    0
+                )
+            }
+        }
+```
+
+## 2. Notification 채널을 생성
+
+Android 8.0(API 26) 이상부터는 알림을 보내기 전에 반드시 NotificationChannel을 만들어야 합니다.
+
+```kotlin
+if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channelId = "your_channel_id"
+            val channelName = "Your Channel Name"
+            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val channel = NotificationChannel(channelId, channelName, importance).apply {
+                description = "Your Channel Description"
+            }
+            val notificationManager: NotificationManager = context.getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(channel)
+        }
+```
+
+| NotificationManager.IMPORTANCE_HIGH | 긴급 알림, 소리와 함께 팝업으로 표시 |
+| --- | --- |
+| NotificationManager.IMPORTANCE_DEFAULT | 일반 알림, 소리는 울리지만 팝업은 없음 |
+| NotificationManager.IMPORTANCE_LOW | 조용한 알림, 소리 없음 |
+| NotificationManager.IMPORTANCE_MIN | 거의 표시되지 않음, 소리/알림 없음 |
+
+## 3. Notification 표시
+
+`NotificationCompat.Builder` 를 사용하여 Android에서 알림의 내용과 스타일을 설정합니다.
+
+```kotlin
+val builder = NotificationCompat.Builder(context, "your_channel_id")
+        .setSmallIcon(icon) // 반드시 설정
+        .setContentTitle(title)
+        .setContentText(text)
+        .setPriority(NotificationCompat.PRIORITY_HIGH) // 중요도 설정
+        .setContentIntent(pendingIntent) // 클릭 시 실행할 Intent 설정
+        .setAutoCancel(true) // 클릭하면 알림 자동 제거 설정
+
+    if (ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS)
+        == PackageManager.PERMISSION_GRANTED
+    ) {
+        with(NotificationManagerCompat.from(context)) {
+            notify(1, builder.build())
+        }
+    }
+```
+
+`setSmallIcon`을 설정하지 않으면 앱이 강제 종료됩니다.
+
+### Builder의 주요 구성 요소
+
+| `setSmallIcon(icon)` | 필수. 상태표시줄에 표시되는 작은 아이콘. 없으면 앱 크래시 발생 |
+| --- | --- |
+| `setContentTitle(title)` | 알림의 제목. 가장 눈에 잘 띔 |
+| `setContentText(text)` | 알림의 본문 내용 |
+| `setPriority(priority)` | 알림의 표시 우선순위를 설정. `PRIORITY_HIGH`이면 헤드업 알림 등 |
+| `setStyle(style)` | BigTextStyle(긴 메시지 표시), BigPictureStyle(이미지 알림) 같은 알림 스타일 적용 |
+| `setContentIntent(pendingIntent)` | 사용자가 알림을 클릭했을 때 어디로 이동할지 정의 |
+| `setAutoCancel(true)` | 사용자가 클릭하면 알림을 자동으로 제거 |
+| `addAction(icon, title, pendingIntent)` | 알림에 작은 버튼(액션) 추가. 예: 답장, 취소 등 |
+| `setOngoing(boolean)`  | Foreground Service와 함께 사용하여 지속적으로 알림을 띄워야하는 앱에서 사용 |
+
+## 정리
+
+- Android 13(API 33) 이상부터는 알림 권한을 받아야 한다.
+- Android 8.0부터는 NotificationChannel을 반드시 생성해야 한다.
+- 알림 아이콘을 설정하지 않으면 앱이 강제로 종료된다.
+- `NotificationCompat.Builder`로 다양한 스타일과 동작을 구성할 수 있다.
