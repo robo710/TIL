@@ -1,0 +1,101 @@
+StateFlow와 SharedFlow는 기존의 Flow가 Cold Stream으로 앱 아키텍처에서 상태(state)나 UI 이벤트를 관리하려면 Hot Stream이 필요하여 이를 위해 StateFlow와 SharedFlow가 등장하였다.
+
+### Cold Stream과 Hot Stream이란
+
+- **Cold Stream**
+    - 소비자가 수집(collect)을 시작해야 데이터가 흐르기 시작함
+    - 하나의 생산자 = 하나의 소비자
+- **Hot Stream**
+    - 소비자와 상관없이 데이터가 지속적으로 흐름
+    - 하나의 생산자 = 여러 소비자
+
+## StateFlow란?
+
+StateFlow는 항상 현재 상태 값을 저장하고, 소비자가 생기면 즉시 최신 값을 전달한다.
+
+StateFlow는 상태를 표현하기 위한 Flow로 적합하다.
+
+### 사용 예시
+
+```kotlin
+// ViewModel
+private val _uiState = MutableStateFlow("초기값")
+val uiState: StateFlow<String> = _uiState
+
+fun updateState(newState: String) {
+    _uiState.value = newState
+}
+```
+
+```kotlin
+// UI (Compose)
+val state by viewModel.uiState.collectAsState()
+Text(text = state)
+```
+
+### 주요 특징
+
+| 특징 | 설명 |
+| --- | --- |
+| 값 보존 | 항상 마지막 값을 보존함 (`.value`로 접근 가능) |
+| Default 값 필수 | 생성 시 초기값을 꼭 설정해야 함 |
+| 단일 소비 아님 | 여러 소비자에게 동일한 값을 전달 가능 |
+
+Compose에서 사용 시 collectAsState()로 사용 가능하다.
+
+## SharedFlow란?
+
+SharedFlow는 값 저장 없이 실시간으로 데이터를 전달한다.
+
+토스트, 네비게이션 등 일회성 UI 이벤트 처리에 적합하다.
+
+### 사용 예시
+
+```kotlin
+// ViewModel
+private val _eventFlow = MutableSharedFlow<String>()
+val eventFlow = _eventFlow.asSharedFlow()
+
+suspend fun sendEvent(message: String) {
+    _eventFlow.emit(message)
+}
+```
+
+```kotlin
+// UI
+LaunchedEffect(Unit) {
+    viewModel.eventFlow.collect { message ->
+        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+    }
+}
+```
+
+### 주요 특징
+
+| 특징 | 설명 |
+| --- | --- |
+| 값 저장 X | 상태처럼 값을 저장하지 않음 (필요 시 `replay`로 캐싱 가능) |
+| 일회성 이벤트 전달 | 토스트 메시지, 네비게이션 같은 단발성 이벤트에 적합 |
+| 여러 소비자 지원 | 동시에 여러 소비자가 있어도 모두 받을 수 있음 |
+| 초기값 없음 | 생성 시 초기값이 필요 없음 |
+
+### replay?
+
+`replay` 란 말 그대로 **최근에 방출된 값을 몇 개까지 "재전송(replay)"할 것인지**를 결정하는 설정이다. 기본적으로 `SharedFlow`는 일회성 이벤트 전송에 사용되며 값을 저장하지 않지만, `replay` 값을 지정하면 그 수만큼의 이벤트를 **내부 버퍼에 저장**해두었다가, **새로 구독한 소비자에게도 즉시 전달**할 수 있다.
+
+예를 들어, `replay = 1`로 설정하면 `emit()`으로 보낸 마지막 이벤트 1개는 버퍼에 저장되고, collect가 늦게 시작된 소비자도 그 이벤트를 바로 수신하게 된다. 반면, `replay = 0`이라면 수집 시점 이후의 이벤트만 수신하므로, collect 전에 방출된 이벤트는 받지 못한다.
+
+이러한 특성은 **UI 이벤트 처리에 큰 영향을 미친다**. 예를 들어, 토스트 메시지나 네비게이션 이벤트는 보통 **한 번만 소비되어야 하므로** `replay = 0`이 일반적이다. 반면, 최근 알림 목록이나 상태와 같은 정보를 뒤늦게 수집하는 경우에는 `replay`를 활용하면 유용하다.
+
+단, `replay`에 저장된 이벤트가 많아지면 메모리 부담이 생길 수 있고, 이벤트가 과도하게 쌓이면 `BufferOverflow` 예외가 발생할 수 있다.
+
+## StateFlow VS SharedFlow
+
+|  | StateFlow | SharedFlow |
+| --- | --- | --- |
+| 초기값 | 필요함 | 필요 없음 |
+| 값 저장 | 저장함 (`.value`) | 저장 안함 (옵션으로 `replay` 사용 가능) |
+| 주 용도 | 상태(State) 관리 | 이벤트(Event) 전달 |
+| UI 적합성 | 상태 바인딩에 적합 (예: Compose 상태) | 단발성 UI 이벤트에 적합 (예: 토스트, 네비게이션) |
+| 소비자 수 | 여러 명 가능 | 여러 명 가능 |
+| Compose 사용 | `collectAsState()`로 편하게 사용 | `LaunchedEffect`로 수집 |
