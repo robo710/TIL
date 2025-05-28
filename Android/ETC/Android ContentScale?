@@ -1,1 +1,80 @@
+ContentScale이란 Android Compose에서 이미지를 자르거나 경계 내에서 이미지의 크기가 조정되는 방식을  설정하는 옵션이다.
 
+## ContentScale 옵션
+
+예시 사진
+
+![image.png](attachment:636012e1-21ec-4fb9-add0-de422adfc3f3:image.png)
+
+![image.png](attachment:a14cc30c-03a4-4669-a417-1dc0ace48c9a:image.png)
+
+### ContentScale.Fit(기본 옵션)
+
+이미지를 영역에 맞춰 가로세로 비율을 유지하면서 조정한다.
+
+![image.png](attachment:5c4d2277-ac7b-4a7f-b69b-8e7554df0965:image.png)
+
+![image.png](attachment:ef294ad4-de7a-47eb-a160-67d7157e6d07:image.png)
+
+### ContentScale.Crop
+
+영역을 가득 채우고, 비율을 유지하면서 영역에 맞게 이미지를 가운데를 중심으로 자른다.
+
+![image.png](attachment:b8c7fe10-aad2-42a5-b709-5f1c4a648903:image.png)
+
+![image.png](attachment:569c0fd4-ed95-4df5-a023-1caa9954b925:image.png)
+
+### ContentScale.FillHeight
+
+영역의 높이에 이미지를 조정한다. 이미지의 비율은 유지하지만 너비가 잘릴 수 있다.
+
+![image.png](attachment:8d6a3247-af78-49ac-8432-b032ee50ccbc:image.png)
+
+![image.png](attachment:08d56282-6836-4a09-be62-2a3325ac7af2:image.png)
+
+### ContentScale.FillWidth
+
+영역의 너비에 이미지를 조정한다. 이미지의 비율은 유지하지만 높이가 잘릴 수 있다.
+
+![image.png](attachment:ad6d57b7-bade-4769-bb4b-31fa6a307021:image.png)
+
+![image.png](attachment:9e331298-616c-4041-84c6-d5fab734d1f5:image.png)
+
+### ContentScale.FillBounds
+
+비율을 유지하지 않고, 디스플레이의 영역을 꽉 채우도록 크기를 조정한다.
+
+![image.png](attachment:b18069ec-7849-4b4a-b6aa-beda0188fdfe:image.png)
+
+![image.png](attachment:f1ebadeb-793b-4843-ae9a-67cf47126011:image.png)
+
+### ContentScale.Inside
+
+이미지가 영역을 벗어나지 않는 한에서 가능한 원본 크기로 표시한다.
+
+이미지가 영역보다 크면 축소, 작으면 그대로 둔다.
+
+![image.png](attachment:1747a313-a0b6-4cae-9aa4-2201ce392a08:image.png)
+
+![image.png](attachment:7b9678c1-9e8e-464e-98dd-ae3e36453576:image.png)
+
+### ContentScale.None
+
+이미지를 원본 크기 그대로 표시한다.
+
+이미지가 영역보다 크면 잘리고, 작으면 여백이 발생한다.
+
+![image.png](attachment:a3941790-0c2f-4477-9235-0f3a57759862:image.png)
+
+![image.png](attachment:e1b90d05-4d99-4614-b96e-e972bbef1820:image.png)
+
+## 정리
+
+| ContentScale | 비율 유지 | 이미지 자름 | 용도 |
+| --- | --- | --- | --- |
+| Fit | O | X | 전체 보여주기, 여백 가능 |
+| Crop | O | O | 꽉 채우기, 배경 등 |
+| FillWidth/Height | O | O | 특정 방향 기준 맞춤 |
+| FillBounds | X | X | 왜곡되어도 됨 |
+| Inside | O | X | 가능한 원본 크기 유지 |
+| None | 원본 그대로 | X/O | 원본 표시 |
