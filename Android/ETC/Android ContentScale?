@@ -70,11 +70,11 @@ ContentScale이란 Android Compose에서 이미지를 자르거나 경계 내에
 
 ## 정리
 
-| ContentScale | 비율 유지 | 이미지 자름 | 용도 |
-| --- | --- | --- | --- |
-| Fit | O | X | 전체 보여주기, 여백 가능 |
-| Crop | O | O | 꽉 채우기, 배경 등 |
-| FillWidth/Height | O | O | 특정 방향 기준 맞춤 |
-| FillBounds | X | X | 왜곡되어도 됨 |
-| Inside | O | X | 가능한 원본 크기 유지 |
-| None | 원본 그대로 | X/O | 원본 표시 |
+| ContentScale        | 비율 유지 | 이미지 자름 | 용도                     |
+|---------------------|-----------|--------------|--------------------------|
+| Fit                 | O         | X            | 전체 보여주기, 여백 가능 |
+| Crop                | O         | O            | 꽉 채우기, 배경 등      |
+| FillWidth/Height    | O         | O            | 특정 방향 기준 맞춤     |
+| FillBounds          | X         | X            | 왜곡되어도 됨           |
+| Inside              | O         | X            | 가능한 원본 크기 유지   |
+| None                | 원본 그대로 | X/O         | 원본 표시               |
