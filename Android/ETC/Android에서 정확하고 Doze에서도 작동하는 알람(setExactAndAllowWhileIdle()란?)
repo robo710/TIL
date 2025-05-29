@@ -1,1 +1,79 @@
+Android 앱에서 특정 시간에 작업을 예약할 때 `AlarmManager`를 자주 사용한다.
 
+기기가 절전 모드(Doze)에 들어간 상태에서도 정확하게 알람을 울리게 하려면 `setExactAndAllowWhileIdle()`을 활용해야 한다.
+
+## AlarmManager란?
+
+`AlarmManager`는 특정 시간에 작업을 예약할 수 있는 Android 시스템 서비스이다.
+
+`BroadcastReceiver` 또는 `Service`와 함께 사용하여 특정 시간에 원하는 작업을 실행할 수 있다.
+
+대표적인 사용 예시:
+
+- 알람 앱
+- 정기적인 리마인더
+- 일정한 시간에 서버와 동기화
+
+## Doze 모드란?
+
+Doze모드란 Android 6.0 (API 23)부터 도입된 배터리 절약 기능이다. 
+
+기기가 오랫동안 사용되지 않으면 백그라운드 작업, 네트워크 접근, 알람 등이 제한된다.
+
+이로 인하여 `setExact()`로 예약한 알람은 지연되고, `setRepeating()`도 실행되지 않는다.
+
+## `setExactAndAllowWhileIdle()`란?
+
+`setExactAndAllowWhileIdle()` 이란 Doze 모드에서도 정확하게 알람을 울리기 위해 Android에서 제공하는 API이다.
+
+```kotlin
+fun setExactAndAllowWhileIdle(
+    type: Int,
+    triggerAtMillis: Long,
+    operation: PendingIntent
+)
+```
+
+- `type`: 알람 타입
+    - `ELAPSED_REALTIME` : 시스템 부팅 이후 경과 시간(`SystemClock.elapsedRealtime`) 기준. 기기를 깨우지 않는다.
+    - `ELAPSED_REALTIME_WAKEUP` : 위와 같지만, 기기를 깨운다.
+    - `RTC` : 실제 시간(`System.currentTimeMillis`) 기준. 기기를 깨우지 않는다.
+    - `RTC_WAKEUP` : 실제 시간을 기준으로 하되, 기기를 깨운다.
+- `triggerAtMillis`: 알람 실행 시간 (밀리초)
+- `operation`: 알람이 울릴 때 실행할 작업 (PendingIntent)
+
+## 사용예시
+
+아래 코드는 10분 뒤에 알람을 울리도록 설정한 예시이다.
+
+```kotlin
+val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+
+val intent = Intent(this, AlarmReceiver::class.java)
+val pendingIntent = PendingIntent.getBroadcast(
+    this, 0, intent, PendingIntent.FLAG_IMMUTABLE
+)
+
+val triggerTime = System.currentTimeMillis() + 10 * 60 * 1000 // 10분 뒤
+
+alarmManager.setExactAndAllowWhileIdle(
+    AlarmManager.RTC_WAKEUP,
+    triggerTime,
+    pendingIntent
+)
+```
+
+## 다른 알람 메서드들과의 차이점
+
+| 메서드 | Doze 대응 | 정확성 | 반복 가능 여부 |
+| --- | --- | --- | --- |
+| `set()` | X | X | O |
+| `setExact()` | X | O | X |
+| `setAndAllowWhileIdle()` | O | X | X |
+| `setExactAndAllowWhileIdle()` | O | O | X |
+
+## 주의사항
+
+- `setExactAndAllowWhileIdle()`는 자주 호출하면 배터리 사용에 악영향을 줄 수 있다.
+- Android는 앱이 너무 많은 알람을 설정하면 제한할 수 있다.
+- 따라서 `setExactAndAllowWhileIdle()`는 꼭 필요한 경우에만 사용하고, 너무 자주 호출하지 않도록 주의해야 한다.
